@@ -73,18 +73,14 @@ makeRequest('GET', 'https://oc-p5-api.herokuapp.com/api/furniture/5be9cc611c9d44
                         </button>
                     </div>                
                 </div>`;
+                                                 
+                let optionColor = document.querySelector("select");
+                for (i = 0; i < colors.length; i++){
+                    optionColor.innerHTML +=`
+                        <option value="${colors[i]}">${colors[i]}</option>`;
+                };
                  
-                
-                function color(){
-                    let optionColor = document.querySelector("select");
-                    for (i = 0; i < colors.length; i++){
-                        optionColor.innerHTML +=`
-                            <option value="${colors[i]}">${colors[i]}</option>`;
-                    };
-                };                                                
-                color(); 
              
-
                 let select = document.querySelector("select");
                 let value = document.querySelector("option");
 
