@@ -1,31 +1,3 @@
-new Promise(function (resolve, reject) {
-});
-
-function makeRequest (method, url) {
-  return new Promise(function (resolve, reject) {
-    var xhr = new XMLHttpRequest();
-    xhr.open(method, url);
-    xhr.onload = function() {
-            if (this.status == 200) {
-                var response = JSON.parse(this.responseText);
-                resolve(response);
-            } else {
-        reject({
-          status: this.status,
-          statusText: xhr.statusText
-        });
-      }
-    };   
-    xhr.onerror = function () {
-      reject({
-        status: this.status,
-        statusText: xhr.statusText
-      });
-    };
-    xhr.send();
-  });
-};
-
 function color(colors){
     let html = '<option value="">Choisir la couleur</option>'
         for (i = 0; i < colors.length; i++){
@@ -63,9 +35,12 @@ function produitHtml(produit){
                 </button>
             </div>                
         </div>`;
-}; 
+};
 
-function pushProduit(produitColor, produit,){
+function pushProduit(produit, produitsChoosen, produitColor, storedProduits){
+    storedProduits.push(produitsChoosen);
+    localStorage.setItem('newArticle', JSON.stringify(storedProduits));
+    console.log(storedProduits);
     if (window.confirm(produit.name + " " + produitColor + ' a bien été ajouté. Souhaitez vous consulter votre panier ?')) { 
         window.location.href = "panier.html";
     } else {
@@ -73,42 +48,42 @@ function pushProduit(produitColor, produit,){
     }
 };
 
-function choosen(produit, storedProduits, produitsChoosen){
+function choosen(produit){
+    let select = document.querySelector("select");
+    let value = document.querySelector("option");
+
     document.querySelector(".btn-primary").addEventListener("click", function (event) {
         event.preventDefault();
+        
+        let produitsChoosen = {
+                produitName: produit.name,
+                produitId: produit._id,
+                produitColor: select.value,
+                quantity: 1,
+                produitPrice: produit.price / 100,
+            };
+            console.log(produitsChoosen);
 
-        if(storedProduits) {
-            pushProduit(produit, produitsChoosen);
-        } else {
-            storedProduits = [];
-            pushProduit(produit, produitsChoosen);
-        } 
+        const produitColor = select.value;
+
+        let storedProduits = JSON.parse(localStorage.getItem('newArticle'));
+
+        if(storedProduits){
+            pushProduit(produit, produitsChoosen, produitColor, storedProduits);
+        } else{
+            storedProduits = []
+            pushProduit(produit, produitsChoosen, produitColor, storedProduits);
+        }                     
     });
 };
 
+
 makeRequest('GET', `https://oc-p5-api.herokuapp.com/api/furniture/${new URLSearchParams(window.location.search).get('id')}`)
-.then(function (produit) {
+.then(function (produit, storedProduits, produitColor, produitsChoosen) {
    
     produitHtml(produit);
 
-    let select = document.querySelector("select");
-    let value = document.querySelector("option");
-    let produitColor = select.value;
-    let produitsChoosen = {
-            produitName: produit.name,
-            produitId: produit._id,
-            produitColor: select.value,
-            quantity: 1,
-            produitPrice: produit.price / 100,
-        };
-    console.log(produitsChoosen);
-
-    let storedProduits = JSON.parse(localStorage.getItem('newArticle'));
-    storedProduits.push(produitsChoosen);
-    localStorage.setItem('newArticle', JSON.stringify(storedProduits));
-    console.log(storedProduits);
-
-    choosen(produit, produitColor, produitsChoosen, storedProduits);
+    choosen(produit, storedProduits, produitColor, produitsChoosen);
 });
 
 
