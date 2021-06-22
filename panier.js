@@ -14,22 +14,23 @@ document.getElementById('produitPanier').innerHTML +=`
     let i = 0;
     for (storedProduit of storedProduits) {        
         document.getElementById('produitPanier').innerHTML +=`
-        <div class="col-12 col-md-4 card">
-            <p class="card-text">${storedProduit.quantity + " " + storedProduit.produitName + " , " + storedProduit.produitColor}</p>
-            <div class="card-body" id="${i++}">
-                <p class="card-text" class="produit_price">${storedProduit.produitPrice}€</p>
-            </div>
-            <button id="garbage_button" type="button" class="btn-danger">Supprimer</button>
-        </div>`;
-        
+        <tbody id="${i++}" class="produit_detaille">
+            <tr>
+                <td>${storedProduit.produitName}</td>
+                <td>${storedProduit.produitColor}</td>
+                <td>${storedProduit.produitPrice}€</td>
+                <td><button class="btn-danger garbage_button" type="button">Supprimer</button></td>
+            </tr>           
+        </tbody>`;
+               
     };   
 };
 
-let garbageButton = document.getElementById('garbage_button');
+let garbageButton = document.getElementsByClassName('garbage_button');
 for (let i = 0 ; i < garbageButton.length; i++) {       
     garbageButton[i].addEventListener('click' , function (event) { 
         event.preventDefault();
-        let id = this.closest('.produit_price');
+        let id = this.closest('.produit_detaille');
 
         storedProduits.splice(id, 1);
         console.log(storedProduits);
@@ -149,7 +150,7 @@ document.getElementById('submit').addEventListener("click", function (event) {
         event.preventDefault();
 
         // envoie du prix total au localStorage
-        localStorage.setItem('totalPrice', totalPrice);
+        localStorage.setItem('totalPrice', JSON.stringify(totalPrice));
         const storagePrice = localStorage.getItem('totalPrice');
         console.log(storagePrice);
 
@@ -178,15 +179,11 @@ document.getElementById('submit').addEventListener("click", function (event) {
         }
         console.log(send);
 
-        makeRequest('GET', `https://oc-p5-api.herokuapp.com/api/furniture`)
-        .then (function (produit, localStorage) {
-            
-                let orderId = localStorage.getItem('responseOrder');
-                localStorage.setItem("responseOrder", produit.orderId);
-                window.location = "confirmation.html";
-                localStorage.removeItem("newArticle");
+        localStorage.setItem('idProduit', JSON.stringify(products));
+        const storageId = localStorage.getItem('idProduit');
+        console.log(products);
 
-            
-        });
+        window.location = "confirmation.html";
+        localStorage.removeItem("newArticle");
     };
 });

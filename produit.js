@@ -70,20 +70,20 @@ function choosen(produit){
 
         if(storedProduits){
             pushProduit(produit, produitsChoosen, produitColor, storedProduits);
-        } else{
-            storedProduits = []
-            pushProduit(produit, produitsChoosen, produitColor, storedProduits);
+        } else{            
+            storedProduits = [];
+           pushProduit(produit, produitsChoosen, produitColor, storedProduits); 
         }                     
     });
 };
 
 
 makeRequest('GET', `https://oc-p5-api.herokuapp.com/api/furniture/${new URLSearchParams(window.location.search).get('id')}`)
-.then(function (produit, storedProduits, produitColor, produitsChoosen) {
+.then(function (produit) {
    
     produitHtml(produit);
 
-    choosen(produit, storedProduits, produitColor, produitsChoosen);
+    choosen(produit);
 });
 
 
