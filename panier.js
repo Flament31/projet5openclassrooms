@@ -1,8 +1,20 @@
 let storedProduits = JSON.parse(localStorage.getItem('newArticle'));
 console.log(storedProduits);
 
+function deletElement(){
+    for (let i = 0 ; i < document.getElementsByClassName('garbage_button').length; i++) {        
+        let id = document.getElementById('produit_detaille');
 
-if(storedProduits == null || storedProduits.length === 0){ 
+        storedProduits.splice(id, 1);
+        console.log(storedProduits);
+
+        localStorage.setItem('newArticle', JSON.stringify(storedProduits));
+        JSON.parse(localStorage.getItem('newArticle'));   
+    };      
+};
+
+
+if(storedProduits == null || storedProduits.length === 0){
          
 document.getElementById('produitPanier').innerHTML +=`
 <div class="col-12 col-md-4 card">
@@ -12,53 +24,23 @@ document.getElementById('produitPanier').innerHTML +=`
 </div>`;
 } else {
     let i = 0;
-    for (storedProduit of storedProduits) {        
-        document.getElementById('produitPanier').innerHTML +=`
-        <tbody id="${i++}" class="produit_detaille">
-            <tr>
-                <td>${storedProduit.produitName}</td>
-                <td>${storedProduit.produitColor}</td>
-                <td>${storedProduit.produitPrice}€</td>
-                <td><button class="btn-danger garbage_button" type="button">Supprimer</button></td>
-            </tr>           
-        </tbody>`;
-               
-    };   
+    for (storedProduit of storedProduits) {                
+        document.getElementById('element_tableau').innerHTML +=`
+        <tr>
+            <td>${storedProduit.produitName}</td>
+            <td>${storedProduit.produitColor}</td>
+            <td>${storedProduit.produitPrice}€</td>
+            <td class="garbage_button"><button  class="btn-danger"  id="produit_detaille" id="${i++}" type="button" onclick="deletElement()">Supprimer</button></td>            
+        </tr>`;              
+    };
 };
 
-let garbageButton = document.getElementsByClassName('garbage_button');
-for (let i = 0 ; i < garbageButton.length; i++) {       
-    garbageButton[i].addEventListener('click' , function (event) { 
-        event.preventDefault();
-        let id = this.closest('.produit_detaille');
-
-        storedProduits.splice(id, 1);
-        console.log(storedProduits);
-
-        localStorage.setItem('newArticle', JSON.stringify(storedProduits));
-        JSON.parse(localStorage.getItem('newArticle'));
-
-        alert('Cet article a bien été supprimé !');
-        window.location.href = "panier.html";   
-    });      
-};
-
-function isValid(value) {
-    return /^[A-Z-a-z\s]{3,40}$/.test(value);
-};
-
-// création fonctions de validité adresse
-function validAddress(value) {
-    return /^[A-Z-a-z-0-9\s]{5,80}$/.test(value)
-};
-
-// création fonctions de validité mail
 function validMail(value){
     return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)
 };
 
 document.getElementById('formulaire').innerHTML +=`
-    <form class="form-group" class="contact_form">
+    <form id="contact_form" class="form-group">
         <h3>Pour valider votre commande merci de bien vouloir remplir le formulaire ci-dessous :</h3>
         <div class="div_name">
             <label for="prénom">Prénom</label> : <input type="text" name="prénom" id="prenom" required="true">           
@@ -95,76 +77,24 @@ document.getElementById('produitPanier').innerHTML +=`
     <p class="card-text">${"Montant total = " + totalPrice + " €"}</p>
 </div>`
 
-let firstName = document.getElementById('prenom');
-
-firstName.addEventListener("change", function(event) {
-    if (isValid(firstName.value)) {
-    } else {
-        alert( "Aucun chiffre ou symbole n'est autorisé.")
-        event.preventDefault()
-    }
-});
-
-let lastName = document.getElementById('nom');
-
-lastName.addEventListener("change", function (event) {
-    if (isValid(lastName.value)) {
-    } else {
-        alert("Aucun chiffre ou symbole n'est autorisé.")
-        event.preventDefault()
-    }
-});
-
-let address = document.getElementById('adresse');
-
-address.addEventListener("change", function (event) {
-    if (validAddress(address.value)){
-    } else {
-        event.preventDefault()
-        alert("Aucun symbole n'est autorisé.");
-    }
-});
-
-let city = document.getElementById('ville');
-
-city.addEventListener("change", function (event) {
-    if (isValid(city.value)) {
-    } else {
-        alert("Aucun chiffre ou symbole n'est autorisé.")
-        event.preventDefault()
-    }
-});
-
 let mail = document.getElementById('email');
 
 mail.addEventListener("change", function (event) {
-    if (validMail(mail.value)){
+    if (validMail(mail.value), div_name = true){
     } else {
         event.preventDefault()
         alert("Veuillez saisir une adresse mail valide (exemple : abcd@mail.com).");
     }
 });
 
-document.getElementById('submit').addEventListener("click", function (event) {
-    if(isValid(firstName.value) && isValid(lastName.value) && validAddress(address.value) && isValid(city.value) && validMail(mail.value)){
+window.addEventListener("click", function (event) {
+    if(validMail(mail.value)){
         event.preventDefault();
 
-        // envoie du prix total au localStorage
         localStorage.setItem('totalPrice', JSON.stringify(totalPrice));
         const storagePrice = localStorage.getItem('totalPrice');
         console.log(storagePrice);
-
-        //Création de l'objet "contact"
-        let contact = {
-            firstName: firstName.value,
-            lastName: lastName.value,
-            address: address.value,
-            city: city.value,
-            email: mail.value,
-        }
-        console.log(contact);
-
-        // création du tableau products 
+ 
         let products = [];
         for (storedProduit of storedProduits) {
             let productsId = storedProduit.produitId;
@@ -172,18 +102,33 @@ document.getElementById('submit').addEventListener("click", function (event) {
         }
         console.log(products);
 
-        // création d'un objet regroupant contact et produits
-        let send = {
-            contact,
-            products,
-        }
-        console.log(send);
-
         localStorage.setItem('idProduit', JSON.stringify(products));
         const storageId = localStorage.getItem('idProduit');
         console.log(products);
+        
+        var XHR = new XMLHttpRequest();
+        var FD = new FormData(form);
 
+        XHR.addEventListener("click", function(event) {
+            alert(event.target.responseText);
+        });
+
+        XHR.addEventListener("error", function(event) {
+            alert('Oups! Quelque chose s\'est mal passé.');
+        });
+
+        XHR.open("POST", "https://oc-p5-api.herokuapp.com/api/furniture");
+        XHR.send(FD);
+
+        var form = document.getElementById("contact_form");
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+        });
+            
         window.location = "confirmation.html";
         localStorage.removeItem("newArticle");
     };
 });
+
+
