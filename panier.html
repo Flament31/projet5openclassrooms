@@ -38,9 +38,9 @@
         </div>
     </header>
 
-    <main class="container">
+    <main class="container" id="main_panier">
         <table id="produitPanier" class="table">
-            <thead>
+            <thead id="table_head">
                 <tr>
                     <th>Nom du produit</th>
                     <th>Couleur</th>
@@ -49,15 +49,33 @@
             </thead>
             <tbody id="element_tableau">
                 
-            </tbody>
-            
-            
+            </tbody>           
         </table>
 
         <div id="formulaire" class="row">
-            
-        </div>
-                
+            <form id="contact_form" class="form-group">
+                <h3>Pour valider votre commande merci de bien vouloir remplir le formulaire ci-dessous :</h3>
+                <div class="div_name">
+                    <label for="prénom">Prénom</label> : <input type="text" name="prénom" id="prenom" required="true">           
+                </div>
+                <div class="div_name">
+                    <label for="nom">Nom</label> : <input type="text" name="Nom" id="nom" required="true">            
+                </div>
+                <div class="div_name">
+                    <label for="adresse">Adresse</label> : 
+                    <textarea type="text" name="adresse" id="adresse" required="true"></textarea>
+                </div>
+                <div class="div_name">
+                    <label for="ville">Ville</label> : <input type="text" name="ville" id="ville" required="true">
+                </div>
+                <div class="div_name">
+                    <label for="email">email</label> : <input type="email" name="email" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  required="true">
+                </div>
+                <div class="div_name">
+                    <button class="btn-secondary" type="submit" name="add" id="valid">Valider votre commande</button>
+                </div>
+            </form>
+        </div>                
     </main>
 
 

@@ -1,18 +1,17 @@
 let storedProduits = JSON.parse(localStorage.getItem('newArticle'));
 console.log(storedProduits);
 
-function deletElement(){
-    for (let i = 0 ; i < document.getElementsByClassName('garbage_button').length; i++) {        
-        let id = document.getElementById('produit_detaille');
+function deletElement(i){
+    let pos = i;
 
-        storedProduits.splice(id, 1);
-        console.log(storedProduits);
+    storedProduits.splice(pos, 1);
+    console.log(storedProduits);
 
-        localStorage.setItem('newArticle', JSON.stringify(storedProduits));
-        JSON.parse(localStorage.getItem('newArticle'));   
-    };      
+    localStorage.setItem('newArticle', JSON.stringify(storedProduits));
+    JSON.parse(localStorage.getItem('newArticle'));
+
+    window.location = "panier.html"; 
 };
-
 
 if(storedProduits == null || storedProduits.length === 0){
          
@@ -22,46 +21,22 @@ document.getElementById('produitPanier').innerHTML +=`
         <p class="card-text">Votre panier est vide !</p>
     </div>
 </div>`;
+
+document.getElementById('main_panier').removeChild(document.getElementById('formulaire'));
+document.getElementById('produitPanier').removeChild(document.getElementById('table_head'));
+
 } else {
-    let i = 0;
+    let i = 0;    
     for (storedProduit of storedProduits) {                
         document.getElementById('element_tableau').innerHTML +=`
         <tr>
             <td>${storedProduit.produitName}</td>
             <td>${storedProduit.produitColor}</td>
             <td>${storedProduit.produitPrice}€</td>
-            <td class="garbage_button"><button  class="btn-danger"  id="produit_detaille" id="${i++}" type="button" onclick="deletElement()">Supprimer</button></td>            
+            <td><button class="btn-danger" type="button" onclick="deletElement(${i++})">Supprimer</button></td>            
         </tr>`;              
     };
 };
-
-function validMail(value){
-    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)
-};
-
-document.getElementById('formulaire').innerHTML +=`
-    <form id="contact_form" class="form-group">
-        <h3>Pour valider votre commande merci de bien vouloir remplir le formulaire ci-dessous :</h3>
-        <div class="div_name">
-            <label for="prénom">Prénom</label> : <input type="text" name="prénom" id="prenom" required="true">           
-        </div>
-        <div class="div_name">
-            <label for="nom">Nom</label> : <input type="text" name="Nom" id="nom" required="true">            
-        </div>
-        <div class="div_name">
-            <label for="adresse">Adresse</label> : 
-            <textarea type="text" name="adresse" id="adresse" required="true"></textarea>
-        </div>
-        <div class="div_name">
-            <label for="ville">Ville</label> : <input type="text" name="ville" id="ville" required="true">
-        </div>
-        <div class="div_name">
-            <label for="email">email</label> : <input type="email" name="email" id="email" required="true">
-        </div>
-        <div class="div_name">
-            <button id="submit" type="submit" name="add" id="valid" class="btn-secondary" >Valider votre commande</button>
-        </div>
-    </form>`;
 
 let calculPrice = []
 for (storedProduit of storedProduits) {
@@ -77,20 +52,21 @@ document.getElementById('produitPanier').innerHTML +=`
     <p class="card-text">${"Montant total = " + totalPrice + " €"}</p>
 </div>`
 
-let mail = document.getElementById('email');
+function VerifForm(){ 
+    var AllIsOk=0;
+ 
+    if(document.forms['contact_form'].elements['nom'].value==''){AllIsOk++;}
+    if(document.forms['contact_form'].elements['prenom'].value==''){AllIsOk++;}
+    if(document.forms['contact_form'].elements['ville'].value==''){AllIsOk++;}
+    if(document.forms['contact_form'].elements['adresse'].value==''){AllIsOk++;}
+    if(document.forms['contact_form'].elements['email'].value==''){AllIsOk++;}
 
-mail.addEventListener("change", function (event) {
-    if (validMail(mail.value), div_name = true){
-    } else {
-        event.preventDefault()
-        alert("Veuillez saisir une adresse mail valide (exemple : abcd@mail.com).");
-    }
-});
+    return (AllIsOk==0);
+};
 
-window.addEventListener("click", function (event) {
-    if(validMail(mail.value)){
+document.getElementById('valid').addEventListener("click", function (event, data){
+    if (VerifForm()) {
         event.preventDefault();
-
         localStorage.setItem('totalPrice', JSON.stringify(totalPrice));
         const storagePrice = localStorage.getItem('totalPrice');
         console.log(storagePrice);
@@ -99,32 +75,34 @@ window.addEventListener("click", function (event) {
         for (storedProduit of storedProduits) {
             let productsId = storedProduit.produitId;
             products.push((productsId));
-        }
-        console.log(products);
+        };
 
         localStorage.setItem('idProduit', JSON.stringify(products));
         const storageId = localStorage.getItem('idProduit');
         console.log(products);
         
         var XHR = new XMLHttpRequest();
-        var FD = new FormData(form);
+        var urlEncodedData = "";
+        var urlEncodedDataPairs = [];
+        var name;
 
-        XHR.addEventListener("click", function(event) {
-            alert(event.target.responseText);
+        for(name in data) {
+            urlEncodedDataPairs.push(encodeURIComponent(name) + '=' + encodeURIComponent(data[name]));
+        };
+
+        urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
+
+        XHR.addEventListener('load', function(event) {
+            alert('Ouais ! Données envoyées et réponse chargée.');
         });
 
-        XHR.addEventListener("error", function(event) {
+        XHR.addEventListener('error', function(event) {
             alert('Oups! Quelque chose s\'est mal passé.');
         });
 
-        XHR.open("POST", "https://oc-p5-api.herokuapp.com/api/furniture");
-        XHR.send(FD);
-
-        var form = document.getElementById("contact_form");
-
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();
-        });
+        XHR.open('POST', 'https://oc-p5-api.herokuapp.com/api/furniture/');
+        XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        XHR.send(urlEncodedData);
             
         window.location = "confirmation.html";
         localStorage.removeItem("newArticle");
