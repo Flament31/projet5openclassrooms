@@ -43,8 +43,7 @@ for (storedProduit of storedProduits) {
     let article = storedProduit.produitPrice;
     calculPrice.push(article);
 };
-const reducer = (accumulator, currentValue) => accumulator + currentValue;
-const totalPrice = calculPrice.reduce(reducer, 0);
+var totalPrice = calculPrice.reduce((a, b)=> a + b,0);
 console.log(totalPrice);
 
 document.getElementById('produitPanier').innerHTML +=`
