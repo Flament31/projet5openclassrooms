@@ -43,7 +43,10 @@ for (storedProduit of storedProduits) {
     let article = storedProduit.produitPrice;
     calculPrice.push(article);
 };
-var totalPrice = calculPrice.reduce((a, b)=> a + b,0);
+
+let totalPrice = calculPrice.reduce(function(accumulateur, valeurCourante, index, array){
+    return accumulateur + valeurCourante;
+});
 console.log(totalPrice);
 
 document.getElementById('produitPanier').innerHTML +=`
@@ -92,11 +95,7 @@ document.getElementById('valid').addEventListener("click", function (event, data
         urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
 
         XHR.addEventListener('load', function(event) {
-            alert('Ouais ! Données envoyées et réponse chargée.');
-        });
-
-        XHR.addEventListener('error', function(event) {
-            alert('Oups! Quelque chose s\'est mal passé.');
+            alert('Ouais ! Données bien envoyées !');
         });
 
         XHR.open('POST', 'https://oc-p5-api.herokuapp.com/api/furniture/');
@@ -105,6 +104,10 @@ document.getElementById('valid').addEventListener("click", function (event, data
             
         window.location = "confirmation.html";
         localStorage.removeItem("newArticle");
+    } else{
+        XHR.addEventListener('error', function(event) {
+            alert('Oups! Quelque chose s\'est mal passé.');
+        });
     };
 });
 
