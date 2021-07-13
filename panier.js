@@ -2,31 +2,18 @@ let storedProduits = JSON.parse(localStorage.getItem('newArticle'));
 console.log(storedProduits);
 
 function deletElement(i){
-    let pos = i;
-
-    storedProduits.splice(pos, 1);
+    
+    storedProduits.splice(i, 1);
     console.log(storedProduits);
 
     localStorage.setItem('newArticle', JSON.stringify(storedProduits));
-    JSON.parse(localStorage.getItem('newArticle'));
+    JSON.parse(localStorage.getItem('newArticle')); 
 
-    window.location = "panier.html"; 
+    window.location = "confirmation.html";    
 };
 
-if(storedProduits == null || storedProduits.length === 0){
-         
-document.getElementById('produitPanier').innerHTML +=`
-<div class="col-12 col-md-4 card">
-    <div class="card-body">
-        <p class="card-text">Votre panier est vide !</p>
-    </div>
-</div>`;
-
-document.getElementById('main_panier').removeChild(document.getElementById('formulaire'));
-document.getElementById('produitPanier').removeChild(document.getElementById('table_head'));
-
-} else {
-    let i = 0;    
+function panierPlein(){
+    let i = 0;   
     for (storedProduit of storedProduits) {                
         document.getElementById('element_tableau').innerHTML +=`
         <tr>
@@ -38,77 +25,110 @@ document.getElementById('produitPanier').removeChild(document.getElementById('ta
     };
 };
 
-let calculPrice = []
-for (storedProduit of storedProduits) {
-    let article = storedProduit.produitPrice;
-    calculPrice.push(article);
+function prixTotal(totalPrice) {
+    document.getElementById('element_tableau').innerHTML +=`
+    <tr>
+        <th>${"Montant total = " + totalPrice + " €"}</th>
+    </tr>`;
 };
 
-let totalPrice = calculPrice.reduce(function(accumulateur, valeurCourante, index, array){
-    return accumulateur + valeurCourante;
-});
-console.log(totalPrice);
+function apiSend(orderId, contact, products){
+    const req = new Request('https://oc-p5-api.herokuapp.com/api/furniture/order', {
+        method: 'POST',
+        body: `{"products": "contact": "orderId"}`});
 
-document.getElementById('produitPanier').innerHTML +=`
-<div class="col-12 col-md-4 card" class="total">
-    <p class="card-text">${"Montant total = " + totalPrice + " €"}</p>
-</div>`
-
-function VerifForm(){ 
-    var AllIsOk=0;
- 
-    if(document.forms['contact_form'].elements['nom'].value==''){AllIsOk++;}
-    if(document.forms['contact_form'].elements['prenom'].value==''){AllIsOk++;}
-    if(document.forms['contact_form'].elements['ville'].value==''){AllIsOk++;}
-    if(document.forms['contact_form'].elements['adresse'].value==''){AllIsOk++;}
-    if(document.forms['contact_form'].elements['email'].value==''){AllIsOk++;}
-
-    return (AllIsOk==0);
+    fetch(req)
+    .then(response => {
+        if (response.status === 201) {
+        return response.json();
+        } else {
+            throw new Error('Something went wrong on api server!');
+        }
+    })
+    .then(response => {
+        console.debug(response);
+    }).catch(error => {
+        console.error(error);
+    });
 };
 
-document.getElementById('valid').addEventListener("click", function (event, data){
-    if (VerifForm()) {
+function sendFormulaire(totalPrice){
+    document.getElementById('contact_form').addEventListener("submit", function (event){    
         event.preventDefault();
+
         localStorage.setItem('totalPrice', JSON.stringify(totalPrice));
         const storagePrice = localStorage.getItem('totalPrice');
         console.log(storagePrice);
- 
+
         let products = [];
         for (storedProduit of storedProduits) {
+            let furniture = storedProduit;
+            products.push(furniture);
+        };
+
+        localStorage.setItem('products', JSON.stringify(products));
+        const productStorage = localStorage.getItem('products');
+        console.log(productStorage);
+
+        let contact = {
+            firstName: document.getElementById('nom').value,
+            lastName: document.getElementById('prenom').value,
+            address: document.getElementById('adresse').value,
+            city: document.getElementById('ville').value,
+            email: document.getElementById('email').value,
+        };
+
+        localStorage.setItem('contact', JSON.stringify(contact));
+        const contactValue = localStorage.getItem('contact');
+        console.log(contactValue); 
+
+        let orderId = [];
+        for (storedProduit of storedProduits){
             let productsId = storedProduit.produitId;
-            products.push((productsId));
+            orderId.push(productsId)
         };
 
-        localStorage.setItem('idProduit', JSON.stringify(products));
-        const storageId = localStorage.getItem('idProduit');
-        console.log(products);
+        localStorage.setItem('orderId', JSON.stringify(orderId));
+        const storageId = localStorage.getItem('orderId');
+        console.log(storageId)
         
-        var XHR = new XMLHttpRequest();
-        var urlEncodedData = "";
-        var urlEncodedDataPairs = [];
-        var name;
+        apiSend(orderId, contact, products);
 
-        for(name in data) {
-            urlEncodedDataPairs.push(encodeURIComponent(name) + '=' + encodeURIComponent(data[name]));
-        };
+        
+    });
+};
 
-        urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
+if(storedProduits == null || storedProduits.length === 0){
+         
+    document.getElementById('main_panier').innerHTML +=`
+    <div class="col-12 col-md-4 card">
+        <div class="card-body">
+            <p class="card-text">Votre panier est vide !</p>
+        </div>
+    </div>`;
 
-        XHR.addEventListener('load', function(event) {
-            alert('Ouais ! Données bien envoyées !');
-        });
+    document.getElementById('main_panier').removeChild(document.getElementById('formulaire'));
+    document.getElementById('produitPanier').removeChild(document.getElementById('table_head'));
+} else {
+    panierPlein();
 
-        XHR.open('POST', 'https://oc-p5-api.herokuapp.com/api/furniture/');
-        XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        XHR.send(urlEncodedData);
-            
-        window.location = "confirmation.html";
-        localStorage.removeItem("newArticle");
-    } else{
-        XHR.addEventListener('error', function(event) {
-            alert('Oups! Quelque chose s\'est mal passé.');
-        });
+    let calculPrice = []
+    for (storedProduit of storedProduits) {
+        let article = storedProduit.produitPrice;
+        calculPrice.push(article);
     };
-});
+    let totalPrice = calculPrice.reduce(function(accumulateur, valeurCourante){
+        return accumulateur + valeurCourante;
+    });
+    console.log(totalPrice);
+
+    prixTotal(totalPrice);
+
+    sendFormulaire(totalPrice);
+};
+
+
+
+
 
 

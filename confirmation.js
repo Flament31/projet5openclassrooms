@@ -1,5 +1,5 @@
-let products = JSON.parse(localStorage.getItem('idProduit'));
-console.log(products);
+let orderId = JSON.parse(localStorage.getItem('orderId'));
+console.log(orderId);
 
 let totalPrice = JSON.parse(localStorage.getItem('totalPrice'));
 console.log(totalPrice);
@@ -17,7 +17,7 @@ document.getElementById('confirmation').innerHTML+= `
 	    <div class="recapitulatif" class="col">
 	        <h3>Récapitulatif de votre commande :</h3>
 	        <p>
-		        Numéro de commande : ${products}</br>
+		        Numéro de commande : ${orderId}</br>
 		        Montant total de votre commande : ${totalPrice} €
 	        </p>       
 	    </div>
