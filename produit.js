@@ -10,17 +10,17 @@ function color(colors){
 function produitHtml(produit){
         
         document.getElementById("produit").innerHTML +=`
-        <div class="col-12 col-md-6 card">
+        <div class="card col-12 col-md-6 my-3">
             <img class=”card-img-top” src="${produit.imageUrl}">
             <div class="card-body">
                 <h2 class="card-title">${produit.name}</h2>
-                <p class="card-text">${produit.price / 100 + "€"}</p>
+                <p class="card-text font-weight-bold">${produit.price / 100 + "€"}</p>
             </div>
         </div> 
 
-        <div class="col-12 col-md-6 card">
+        <div class="card col-12 col-md-6 my-3">
             <div class="card-body">
-                <p class="card-text">
+                <p class="card-text text-justify">
                     ${produit.description}
                 </p>
                 
@@ -61,6 +61,7 @@ function choosen(produit){
                 produitColor: select.value,
                 quantity: 1,
                 produitPrice: produit.price / 100,
+                imageUrl: produit.imageUrl
             };
             console.log(produitsChoosen);
 

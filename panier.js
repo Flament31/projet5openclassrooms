@@ -28,7 +28,10 @@ function panierPlein(){
 function prixTotal(totalPrice) {
     document.getElementById('element_tableau').innerHTML +=`
     <tr>
-        <th>${"Montant total = " + totalPrice + " €"}</th>
+        <th>Montant total =</th>
+        <td></td>
+        <th>${totalPrice + "€"}</th>
+        <td></td>
     </tr>`;
 };
 
