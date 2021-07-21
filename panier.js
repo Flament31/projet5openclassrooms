@@ -48,7 +48,7 @@ function apiSend(order){
         } else {
             throw new Error('Something went wrong on api server!');
         }
-    });
+    })
     
     .then(response => {
         console.debug(response);
