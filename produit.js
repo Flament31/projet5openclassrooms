@@ -1,14 +1,12 @@
 function color(colors){
     let html = '<option value="">Choisir la couleur</option>'
         for (i = 0; i < colors.length; i++){
-            html+=`            
-                <option value="${colors[i]}">${colors[i]}</option>`;
+            html+=`<option value="${colors[i]}">${colors[i]}</option>`;
         };
     return html;
 };
 
-function produitHtml(produit){
-        
+function produitHtml(produit){        
         document.getElementById("produit").innerHTML +=`
         <div class="card col-12 col-md-6 my-3">
             <img class=”card-img-top” src="${produit.imageUrl}">
@@ -80,10 +78,8 @@ function choosen(produit){
 
 
 makeRequest('GET', `https://oc-p5-api.herokuapp.com/api/furniture/${new URLSearchParams(window.location.search).get('id')}`)
-.then(function (produit) {
-   
+.then(function (produit) {   
     produitHtml(produit);
-
     choosen(produit);
 });
 

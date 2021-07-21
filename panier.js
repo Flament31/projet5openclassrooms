@@ -1,8 +1,7 @@
 let storedProduits = JSON.parse(localStorage.getItem('newArticle'));
 console.log(storedProduits);
 
-function deletElement(i){
-    
+function deletElement(i){    
     storedProduits.splice(i, 1);
     console.log(storedProduits);
 
@@ -35,43 +34,35 @@ function prixTotal(totalPrice) {
     </tr>`;
 };
 
-function apiSend(orderId, contact, products){
+function apiSend(order){
     const req = new Request('https://oc-p5-api.herokuapp.com/api/furniture/order', {
         method: 'POST',
-        body: `{"products": "contact": "orderId"}`});
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(order)
+    });
 
     fetch(req)
     .then(response => {
-        if (response.status === 201) {
+        if (response.status === 201) {           
         return response.json();
         } else {
             throw new Error('Something went wrong on api server!');
         }
-    })
+    });
+    
     .then(response => {
         console.debug(response);
+        localStorage.setItem("responseOrder", response.orderId);
+        window.location = "confirmation.html";
+        localStorage.removeItem("newArticle");   
     }).catch(error => {
         console.error(error);
-    });
+    });   
 };
 
-function sendFormulaire(totalPrice){
+function sendFormulaire(orderId){
     document.getElementById('contact_form').addEventListener("submit", function (event){    
         event.preventDefault();
-
-        localStorage.setItem('totalPrice', JSON.stringify(totalPrice));
-        const storagePrice = localStorage.getItem('totalPrice');
-        console.log(storagePrice);
-
-        let products = [];
-        for (storedProduit of storedProduits) {
-            let furniture = storedProduit;
-            products.push(furniture);
-        };
-
-        localStorage.setItem('products', JSON.stringify(products));
-        const productStorage = localStorage.getItem('products');
-        console.log(productStorage);
 
         let contact = {
             firstName: document.getElementById('nom').value,
@@ -81,28 +72,20 @@ function sendFormulaire(totalPrice){
             email: document.getElementById('email').value,
         };
 
-        localStorage.setItem('contact', JSON.stringify(contact));
-        const contactValue = localStorage.getItem('contact');
-        console.log(contactValue); 
-
-        let orderId = [];
+        let products = [];
         for (storedProduit of storedProduits){
-            let productsId = storedProduit.produitId;
-            orderId.push(productsId)
+            let furniture = storedProduit.produitId;
+            products.push(furniture)
         };
 
-        localStorage.setItem('orderId', JSON.stringify(orderId));
-        const storageId = localStorage.getItem('orderId');
-        console.log(storageId)
-        
-        apiSend(orderId, contact, products);
-
-        
+        let order = {contact, products};
+        console.log(order);
+       
+        apiSend(order);      
     });
 };
 
-if(storedProduits == null || storedProduits.length === 0){
-         
+if(storedProduits == null || storedProduits.length === 0){         
     document.getElementById('main_panier').innerHTML +=`
     <div class="col-12 col-md-4 card">
         <div class="card-body">
@@ -115,19 +98,18 @@ if(storedProduits == null || storedProduits.length === 0){
 } else {
     panierPlein();
 
-    let calculPrice = []
+    let totalPrice = 0;
     for (storedProduit of storedProduits) {
-        let article = storedProduit.produitPrice;
-        calculPrice.push(article);
+        totalPrice += storedProduit.produitPrice;
+        console.log(totalPrice);
     };
-    let totalPrice = calculPrice.reduce(function(accumulateur, valeurCourante){
-        return accumulateur + valeurCourante;
-    });
-    console.log(totalPrice);
+
+    localStorage.setItem('totalPrice', JSON.stringify(totalPrice));
+    const storagePrice = localStorage.getItem('totalPrice');
+    console.log(storagePrice);
 
     prixTotal(totalPrice);
-
-    sendFormulaire(totalPrice);
+    sendFormulaire();
 };
 
 

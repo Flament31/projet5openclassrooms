@@ -13,9 +13,9 @@ makeRequest('GET', 'https://oc-p5-api.herokuapp.com/api/furniture')
             <h2 class="card-title">${table.name}</h2>
             <p class="card-text font-weight-bold" >${table.price / 100 + "€"}</p>
         </div>
-    </div>  `;
+    </div>`;
   }));
-})
+});
 
 .catch(function (err) {
   console.error('Augh, there was an error!', err.statusText);
