@@ -3,12 +3,12 @@ console.log(storedProduits);
 
 function deletElement(i){    
     storedProduits.splice(i, 1);
-    console.log(storedProduits);
 
     localStorage.setItem('newArticle', JSON.stringify(storedProduits));
-    JSON.parse(localStorage.getItem('newArticle')); 
+    JSON.parse(localStorage.getItem('newArticle'));
+    console.log(storedProduits) 
 
-    window.location = "confirmation.html";    
+    window.location = "panier.html";    
 };
 
 function panierPlein(){
@@ -22,6 +22,7 @@ function panierPlein(){
             <td><button class="btn-danger" type="button" onclick="deletElement(${i++})">Supprimer</button></td>            
         </tr>`;              
     };
+    console.log(document.getElementById('element_tableau').innerHTML);
 };
 
 function prixTotal(totalPrice) {
@@ -32,6 +33,7 @@ function prixTotal(totalPrice) {
         <th>${totalPrice + "€"}</th>
         <td></td>
     </tr>`;
+    console.log(document.getElementById('element_tableau').innerHTML);
 };
 
 function apiSend(order){
@@ -40,8 +42,9 @@ function apiSend(order){
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(order)
     });
+    console.log(req);
 
-    fetch(req)
+    fetch(req)    
     .then(response => {
         if (response.status === 201) {           
         return response.json();
@@ -71,12 +74,14 @@ function sendFormulaire(orderId){
             city: document.getElementById('ville').value,
             email: document.getElementById('email').value,
         };
+        console.log(contact);
 
         let products = [];
         for (storedProduit of storedProduits){
             let furniture = storedProduit.produitId;
             products.push(furniture)
         };
+        console.log(products);
 
         let order = {contact, products};
         console.log(order);
@@ -111,9 +116,3 @@ if(storedProduits == null || storedProduits.length === 0){
     prixTotal(totalPrice);
     sendFormulaire();
 };
-
-
-
-
-
-

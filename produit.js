@@ -3,36 +3,38 @@ function color(colors){
         for (i = 0; i < colors.length; i++){
             html+=`<option value="${colors[i]}">${colors[i]}</option>`;
         };
-    return html;
+    console.log(html);    
+    return html;   
 };
 
 function produitHtml(produit){        
-        document.getElementById("produit").innerHTML +=`
-        <div class="card col-12 col-md-6 my-3">
-            <img class=”card-img-top” src="${produit.imageUrl}">
-            <div class="card-body">
-                <h2 class="card-title">${produit.name}</h2>
-                <p class="card-text font-weight-bold">${produit.price / 100 + "€"}</p>
+    document.getElementById("produit").innerHTML +=`
+    <div class="card col-12 col-md-6 my-3">
+        <img class=”card-img-top” src="${produit.imageUrl}">
+        <div class="card-body">
+            <h2 class="card-title">${produit.name}</h2>
+            <p class="card-text font-weight-bold">${produit.price / 100 + "€"}</p>
+        </div>
+    </div> 
+
+    <div class="card col-12 col-md-6 my-3">
+        <div class="card-body">
+            <p class="card-text text-justify">
+                ${produit.description}
+            </p>
+            
+            <div class="form-group">
+                <select id="selection" class="form-control">
+                    ${color(produit.varnish)}
+                </select>
             </div>
-        </div> 
 
-        <div class="card col-12 col-md-6 my-3">
-            <div class="card-body">
-                <p class="card-text text-justify">
-                    ${produit.description}
-                </p>
-                
-                <div class="form-group">
-                    <select id="selection" class="form-control">
-                        ${color(produit.varnish)}
-                    </select>
-                </div>
-
-                <button id="btn-pannier" type="button" class="btn btn-primary">
-                    Ajouter au pannier
-                </button>
-            </div>                
-        </div>`;
+            <button id="btn-pannier" type="button" class="btn btn-primary">
+                Ajouter au pannier
+            </button>
+        </div>                
+    </div>`;
+    console.log(document.getElementById("produit").innerHTML);
 };
 
 function pushProduit(produit, produitsChoosen, produitColor, storedProduits){

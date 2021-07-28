@@ -9,7 +9,7 @@ document.getElementById('confirmation').innerHTML+=`
 		<div class="col-6">
 		    <h2>Orinico vous remercis de votre commande !</h2>
 		    <p>
-			    Nous avons le plaisir de vous informer que votre commande à bien été enregistré !</br>
+                Nous avons le plaisir de vous informer que votre commande à bien été enregistré !</br>
 			    Vos meubles arriverons bientôt chez vous ! </br>
 			    Vous trouverez ci-contre le récapitulatif de votre commande.
 			</p>
@@ -22,5 +22,7 @@ document.getElementById('confirmation').innerHTML+=`
 	        </p>       
 	    </div>
     </div>`;
+console.log(document.getElementById('confirmation').innerHTML);
 
 localStorage.clear();
+console.log(localStorage);
