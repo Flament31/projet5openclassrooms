@@ -1,6 +1,8 @@
+//Récupération des données du/des produits selectionnés//
 let storedProduits = JSON.parse(localStorage.getItem('newArticle'));
 console.log(storedProduits);
 
+//Création d'un bouton de supression d'un produit//
 function deletElement(i){    
     storedProduits.splice(i, 1);
 
@@ -11,6 +13,7 @@ function deletElement(i){
     window.location = "panier.html";    
 };
 
+//Elément à affficher si le panier est plein//
 function panierPlein(){
     let i = 0;   
     for (storedProduit of storedProduits) {                
@@ -22,9 +25,9 @@ function panierPlein(){
             <td><button class="btn-danger" type="button" onclick="deletElement(${i++})">Supprimer</button></td>            
         </tr>`;              
     };
-    console.log(document.getElementById('element_tableau').innerHTML);
 };
 
+//Affichage du prix total des produits du panier// 
 function prixTotal(totalPrice) {
     document.getElementById('element_tableau').innerHTML +=`
     <tr>
@@ -33,9 +36,9 @@ function prixTotal(totalPrice) {
         <th>${totalPrice + "€"}</th>
         <td></td>
     </tr>`;
-    console.log(document.getElementById('element_tableau').innerHTML);
 };
 
+//Envoie des données du panier à l'api//
 function apiSend(order){
     const req = new Request('https://oc-p5-api.herokuapp.com/api/furniture/order', {
         method: 'POST',
@@ -63,6 +66,8 @@ function apiSend(order){
     });   
 };
 
+//Création d'un objets contenant les réponses du formulaire et les ids des produit du panier et application
+//de la fontion précédente//
 function sendFormulaire(orderId){
     document.getElementById('contact_form').addEventListener("submit", function (event){    
         event.preventDefault();
@@ -90,6 +95,7 @@ function sendFormulaire(orderId){
     });
 };
 
+//Elément à afficher si le panier est vide et s'il est plein, et application des fonctions précédentes// 
 if(storedProduits == null || storedProduits.length === 0){         
     document.getElementById('main_panier').innerHTML +=`
     <div class="col-12 col-md-4 card">
@@ -103,6 +109,7 @@ if(storedProduits == null || storedProduits.length === 0){
 } else {
     panierPlein();
 
+    //Calcule du prix total//
     let totalPrice = 0;
     for (storedProduit of storedProduits) {
         totalPrice += storedProduit.produitPrice;

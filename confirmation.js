@@ -1,9 +1,12 @@
+//Récupération du numéro de commande//
 let orderId = localStorage.getItem('responseOrder');
 console.log(orderId);
 
+//Récupération du prix total//
 let totalPrice = JSON.parse(localStorage.getItem('totalPrice'));
 console.log(totalPrice);
 
+//Affichage des éléments de la page de confiramtion//
 document.getElementById('confirmation').innerHTML+=`
     <div class="row my-4">	
 		<div class="col-6">
@@ -22,7 +25,7 @@ document.getElementById('confirmation').innerHTML+=`
 	        </p>       
 	    </div>
     </div>`;
-console.log(document.getElementById('confirmation').innerHTML);
 
+//Effacement du contenu du panier//
 localStorage.clear();
 console.log(localStorage);

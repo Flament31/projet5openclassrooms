@@ -1,12 +1,13 @@
+//Création du choix de couleur//
 function color(colors){
     let html = '<option value="">Choisir la couleur</option>'
         for (i = 0; i < colors.length; i++){
             html+=`<option value="${colors[i]}">${colors[i]}</option>`;
-        };
-    console.log(html);    
+        };    
     return html;   
 };
 
+//Ajout du code html//
 function produitHtml(produit){        
     document.getElementById("produit").innerHTML +=`
     <div class="card col-12 col-md-6 my-3">
@@ -34,9 +35,9 @@ function produitHtml(produit){
             </button>
         </div>                
     </div>`;
-    console.log(document.getElementById("produit").innerHTML);
 };
 
+//Ajout du produit au panier//
 function pushProduit(produit, produitsChoosen, produitColor, storedProduits){
     storedProduits.push(produitsChoosen);
     localStorage.setItem('newArticle', JSON.stringify(storedProduits));
@@ -48,6 +49,8 @@ function pushProduit(produit, produitsChoosen, produitColor, storedProduits){
     }
 };
 
+//Création d'un objet contenant les différentes informations du produit choisi et ajout de celui-ci au localStorage 
+//et application de la fonction précédente//
 function choosen(produit){
     let select = document.querySelector("select");
     let value = document.querySelector("option");
@@ -78,7 +81,7 @@ function choosen(produit){
     });
 };
 
-
+//Récupération des données du produit selectionné par son id et application des dernières fontions ci-dessus//
 makeRequest('GET', `https://oc-p5-api.herokuapp.com/api/furniture/${new URLSearchParams(window.location.search).get('id')}`)
 .then(function (produit) {   
     produitHtml(produit);

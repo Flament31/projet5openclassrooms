@@ -1,3 +1,4 @@
+//récupération des données de l'API
 new Promise(function (resolve, reject) {
 });
 
@@ -9,6 +10,7 @@ function makeRequest (method, url) {
             if (this.status == 200) {
                 var response = JSON.parse(this.responseText);
                 resolve(response);
+                console.log(response);
             } else {
         reject({
           status: this.status,
