@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-    <title>Orinico : pannier</title>
+    <title>Orinico : panier</title>
 
   </head>
 
@@ -56,27 +56,27 @@
         
 
         <div id="formulaire" class="row mb-3">
-            <form id="contact_form" class="form-group" type="submit">
+            <form id="contact_form"  type="submit">
                 <h4>Pour valider votre commande merci de bien vouloir remplir le formulaire ci-dessous :</h4>
                 <div class="col ">
-                    <div>
+                    <div class="form-group">
                         <label for="prénom">Prénom</label> : <input type="text" name="prénom" class="form-control-sm" id="prenom" required="true">           
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label for="nom">Nom</label> : <input type="text" name="Nom" class="form-control-sm" id="nom" required="true">            
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label for="adresse">Adresse</label> : 
-                        <textarea type="text" name="adresse" class="form-control-sm" id="adresse" required="true"></textarea>
+                        <input type="text" name="adresse" class="form-control-sm" id="adresse" required="true"></input>
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label for="ville">Ville</label> : <input type="text" name="ville" class="form-control-sm" id="ville" required="true">
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label for="email">email</label> : <input type="email" name="email" class="form-control-sm" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  required="true">
                     </div>
                     <div>
-                        <button class="btn-success" type="submit" name="add" id="valid">Valider votre commande</button>
+                        <button class="btn btn-success" type="submit" name="add" id="valid">Valider votre commande</button>
                     </div>
                 </div>               
             </form>

@@ -7,13 +7,15 @@ datums.forEach((produit) => {
     let listeProduit = document.getElementById("listeProduit");
 
     listeProduit.innerHTML +=`
-    <div class="card shadow col-12 col-md-5 mx-2 mt-3">
-        <img src="${produit.imageUrl}" class=”card-img-top” >
-        <a href="produit.html?id=${produit._id}" class="stretched-link"></a>
-        <div class="card-body">
-            <h2 class="card-title">${produit.name}</h2>
-            <p class="card-text" >${produit.price / 100 + "€"}</p>
-        </div>
+    <div  class="shadow col-5 mt-3">
+        <div class="card">
+            <img src="${produit.imageUrl}" class=”card-img-top” >
+            <a href="produit.html?id=${produit._id}" class="stretched-link"></a>
+            <div class="card-body">
+                <h2 class="card-title">${produit.name}</h2>
+                <p class="card-text" >${produit.price / 100 + "€"}</p>
+            </div>
+        </div>       
     </div>  `;
   });
 })

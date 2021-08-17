@@ -1,6 +1,6 @@
 //Création du choix de couleur//
 function color(colors){
-    let html = '<option value="">Choisir la couleur</option>'
+    let html = 0;
         for (i = 0; i < colors.length; i++){
             html+=`<option value="${colors[i]}">${colors[i]}</option>`;
         };    
@@ -10,30 +10,34 @@ function color(colors){
 //Ajout du code html//
 function produitHtml(produit){        
     document.getElementById("produit").innerHTML +=`
-    <div class="card col-12 col-md-6 my-3">
-        <img class=”card-img-top” src="${produit.imageUrl}">
-        <div class="card-body">
-            <h2 class="card-title">${produit.name}</h2>
-            <p class="card-text font-weight-bold">${produit.price / 100 + "€"}</p>
-        </div>
+    <div class="col-md-6 my-3">
+        <div class="card">
+            <img class=”card-img-top” src="${produit.imageUrl}">
+            <div class="card-body">
+                <h2 class="card-title">${produit.name}</h2>
+                <p class="card-text font-weight-bold">${produit.price / 100 + "€"}</p>
+            </div>
+        </div>        
     </div> 
 
-    <div class="card col-12 col-md-6 my-3">
-        <div class="card-body">
-            <p class="card-text text-justify">
-                ${produit.description}
-            </p>
-            
-            <div class="form-group">
-                <select id="selection" class="form-control">
-                    ${color(produit.varnish)}
-                </select>
-            </div>
+    <div class="col-md-6 my-3">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text text-justify">
+                    ${produit.description}
+                </p>
+                
+                <div class="form-group">
+                    <select id="selection" class="form-control">
+                        ${color(produit.varnish)}
+                    </select>
+                </div>
 
-            <button id="btn-pannier" type="button" class="btn btn-primary">
-                Ajouter au pannier
-            </button>
-        </div>                
+                <button id="btn-pannier" type="button" class="btn btn-primary">
+                    Ajouter au pannier
+                </button>
+            </div>     
+        </div>                  
     </div>`;
 };
 

@@ -29,3 +29,8 @@ document.getElementById('confirmation').innerHTML+=`
 //Effacement du contenu du panier//
 localStorage.clear();
 console.log(localStorage);
+
+//renvois vers la page d'acceuil//
+if(orderId == null){ 
+	window.location = "index.html"
+};

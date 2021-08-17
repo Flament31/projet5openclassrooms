@@ -22,7 +22,7 @@ function panierPlein(){
             <td>${storedProduit.produitName}</td>
             <td>${storedProduit.produitColor}</td>
             <td>${storedProduit.produitPrice}€</td>
-            <td><button class="btn-danger" type="button" onclick="deletElement(${i++})">Supprimer</button></td>            
+            <td><button class="btn btn-danger" type="button" onclick="deletElement(${i++})">Supprimer</button></td>            
         </tr>`;              
     };
 };
@@ -98,7 +98,7 @@ function sendFormulaire(orderId){
 //Elément à afficher si le panier est vide et s'il est plein, et application des fonctions précédentes// 
 if(storedProduits == null || storedProduits.length === 0){         
     document.getElementById('main_panier').innerHTML +=`
-    <div class="col-12 col-md-4 card">
+    <div class="col-md-6 card">
         <div class="card-body">
             <p class="card-text">Votre panier est vide !</p>
         </div>
