@@ -7,8 +7,8 @@ datums.forEach((produit) => {
     let listeProduit = document.getElementById("listeProduit");
 
     listeProduit.innerHTML +=`
-    <div  class="shadow col-5 mt-3">
-        <div class="card">
+    <div class="col-5 mt-3">
+        <div class="card shadow">
             <img src="${produit.imageUrl}" class=”card-img-top” >
             <a href="produit.html?id=${produit._id}" class="stretched-link"></a>
             <div class="card-body">
